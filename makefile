@@ -7,10 +7,18 @@ OBJ = $(SRC:.c=.o)
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
-	rm -f $(OBJ)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
 	rm -f $(OBJ) $(TARGET)
+
+run:
+	./$(TARGET)
+
+all:
+	clear
+	make clean
+	make
+	make run
