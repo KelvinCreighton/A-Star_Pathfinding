@@ -1,45 +1,22 @@
 #include <stdio.h>
+#include "map.h"
 
-// const int A_X = 3;
-// const int A_Y = 2;
-// const int B_X = 13;
-// const int B_Y = 14;
-// const int WALL_X = 8;
-// const int WALL_Y = 8;
+int main(int argc, char *argv[]) {
+    // Add argv[2] for the user to request a specific maps csv file name (default will be maps.csv)
+    // if (argc != 2) {
+    //     printf("Usage: %s <Map Number>\n", argv[0]);
+    //     return 1;
+    // }
+    // int mapNumber = atoi(argv[1]);
+    int mapNumber = 0;
 
-void drawGrid(int grid_w, int grid_h, int grid[grid_w][grid_h]) {
-    for (int y = 0; y < grid_w; y++) {
-        for (int x = 0; x < grid_h; x++) {
-            if (grid[x][y] == 1)
-                printf("A ");
-            else if (grid[x][y] == 2)
-                printf("B ");
-            else if (grid[x][y] == 3)
-                printf("O ");
-            else
-                printf("# ");
-        }
-        printf("\n");
-    }
-}
+    int **grid = NULL;
+    int rows, cols;
 
-int main() {
-    const int GRID_WIDTH = 15;
-    const int GRID_HEIGHT = 15;
-    int grid[GRID_WIDTH][GRID_HEIGHT];
+    loadMap("maps.csv", &grid, &rows, &cols, mapNumber);
+    printGrid(grid, rows, cols);
+    freeGrid(&grid, rows);
 
-    for (int y = 0; y < GRID_HEIGHT; y++)
-        for (int x = 0; x < GRID_WIDTH; x++)
-            grid[x][y] = 0;
-    grid[3][2] = 1;
-    grid[14][11] = 2;
-    for (int x = 3; x < 9; x++)
-        grid[x][8] = 3;
-    for (int y = 0; y < 8; y++)
-        grid[8][y] = 3;
-
-
-    drawGrid(GRID_WIDTH, GRID_HEIGHT, grid);
-
+    printf("\n\n");
     return 0;
 }
