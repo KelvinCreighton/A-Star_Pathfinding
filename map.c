@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void loadMap(const char *filename, int ***grid, int *rows, int *cols, int mapNumber) {
-    // Grid values: 0 = #, 1 = A, 2 = B, 3 = O
+void loadMap(const char *filename, int ***grid, int *rows, int *cols, int startNode[2], int endNode[2], int mapNumber) {
+    // Grid values: 0 = #, -1 = A, -2 = B, -3 = O
 
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -47,8 +47,14 @@ void loadMap(const char *filename, int ***grid, int *rows, int *cols, int mapNum
         fclose(file);
         return;
     }
-    (*grid)[ay][ax] = 1;
-    (*grid)[by][bx] = 2;
+    (*grid)[ay][ax] = -1;
+    (*grid)[by][bx] = -2;
+    startNode[0] = ay;
+    startNode[1] = ax;
+    endNode[0] = by;
+    endNode[1] = bx;
+
+    
 
     // Read the rest of the entries before the first empty line '\n' as wall values
     while (1) {
@@ -58,7 +64,7 @@ void loadMap(const char *filename, int ***grid, int *rows, int *cols, int mapNum
         
         for (int y = y1; y <= y2; y++)
             for (int x = x1; x <= x2; x++)
-                (*grid)[y][x] = 3;
+                (*grid)[y][x] = -3;
     }
 
     fclose(file);
@@ -75,14 +81,22 @@ void freeGrid(int ***grid, int rows) {
 void printGrid(int **grid, int rows, int cols) {
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
-            if (grid[y][x] == 1)
-                printf("A ");
-            else if (grid[y][x] == 2)
-                printf("B ");
-            else if (grid[y][x] == 3)
-                printf("O ");
+            if (grid[y][x] == 0)
+                printf("#  ");
+            else if (grid[y][x] == -1)
+                printf("A  ");
+            else if (grid[y][x] == -2)
+                printf("B  ");
+            else if (grid[y][x] == -3)
+                printf("O  ");
+            else if (grid[y][x] >= 0) {
+                if (grid[y][x]/10 < 10)
+                    printf("%d  ", grid[y][x]/10);
+                else
+                    printf("%d ", grid[y][x]/10);
+            } 
             else
-                printf("# ");
+                printf("   ");
         }
         printf("\n");
     }
